@@ -45,6 +45,10 @@ public class Article {
         this.title = title;
     }
 
+    public Article(Long articleId) {
+        this.id = articleId;
+    }
+
 
     @NonNull
     public Utilisateur getAuthor() {

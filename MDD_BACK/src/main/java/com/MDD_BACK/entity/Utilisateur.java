@@ -57,6 +57,9 @@ public class Utilisateur {
         this.username = username;
     }
 
+    public Utilisateur(String authorUsername) {
+    }
+
     public String getEmail() {
         return email;
     }

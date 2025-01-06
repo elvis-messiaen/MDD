@@ -59,4 +59,15 @@ public class CommentaireDTO {
     public void setArticleId(Long articleId) {
         this.articleId = articleId;
     }
+
+    @Override
+    public String toString() {
+        return "CommentaireDTO{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", authorUsername='" + authorUsername + '\'' +
+                ", date=" + date +
+                ", articleId=" + articleId +
+                '}';
+    }
 }

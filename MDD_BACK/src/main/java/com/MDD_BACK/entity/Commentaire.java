@@ -77,4 +77,12 @@ public class Commentaire {
     public void setDate(@NonNull Date date) {
         this.date = date;
     }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 }

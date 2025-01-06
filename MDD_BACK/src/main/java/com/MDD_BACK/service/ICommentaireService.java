@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ICommentaireService {
 
-    Commentaire create(Commentaire commentaire);
+    Commentaire create(Commentaire commentaire, String authorUsername);
 
     Optional<Commentaire> findById(Long id);
 

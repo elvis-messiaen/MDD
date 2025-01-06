@@ -35,7 +35,6 @@ public class ArticleController {
     @GetMapping
     public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         List<Article> articles = articleService.findAll();
-        System.out.println("Articles du backend: " + articles);
         List<ArticleDTO> articleDTOS = articles.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
