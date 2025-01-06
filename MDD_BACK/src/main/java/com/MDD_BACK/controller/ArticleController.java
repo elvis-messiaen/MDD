@@ -65,7 +65,7 @@ public class ArticleController {
         articleDTO.setDescription(article.getDescription());
         articleDTO.setAuthorUsername(article.getAuthor().getUsername());
         articleDTO.setDate(article.getDate());
-        articleDTO.setThemeId(article.getTheme().getId()); // Ajout de la référence au thème
+        articleDTO.setThemeId(article.getTheme().getId());
         return articleDTO;
     }
 }

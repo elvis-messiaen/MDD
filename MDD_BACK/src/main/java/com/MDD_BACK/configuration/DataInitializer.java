@@ -200,47 +200,46 @@ public class DataInitializer {
     private List<Commentaire> initCommentaires(List<Utilisateur> utilisateurs, List<Article> articles) {
         List<Commentaire> commentaires = new ArrayList<>();
 
-        commentaires.add(new Commentaire("Super article ! Très informatif.", new Date(), utilisateurs.get(0), articles.get(0)));
-        commentaires.add(new Commentaire("Merci pour ces informations.", new Date(), utilisateurs.get(1), articles.get(1)));
+        commentaires.add(new Commentaire("Super article ! Très informatif et bien écrit.", new Date(), utilisateurs.get(0), articles.get(0)));
+        commentaires.add(new Commentaire("Merci pour ces informations précieuses et pertinentes.", new Date(), utilisateurs.get(1), articles.get(1)));
 
-        commentaires.add(new Commentaire("Article bien structuré.", new Date(), utilisateurs.get(2), articles.get(2)));
-        commentaires.add(new Commentaire("Très bonne explication.", new Date(), utilisateurs.get(3), articles.get(3)));
+        commentaires.add(new Commentaire("Article bien structuré avec des points clairs.", new Date(), utilisateurs.get(2), articles.get(2)));
+        commentaires.add(new Commentaire("Très bonne explication sur un sujet complexe.", new Date(), utilisateurs.get(3), articles.get(3)));
 
-        commentaires.add(new Commentaire("Sujet intéressant.", new Date(), utilisateurs.get(4), articles.get(4)));
-        commentaires.add(new Commentaire("Merci pour ce partage.", new Date(), utilisateurs.get(5), articles.get(5)));
+        commentaires.add(new Commentaire("Sujet intéressant et très bien traité.", new Date(), utilisateurs.get(4), articles.get(4)));
+        commentaires.add(new Commentaire("Merci pour ce partage de connaissances.", new Date(), utilisateurs.get(5), articles.get(5)));
 
-        commentaires.add(new Commentaire("Très utile, merci.", new Date(), utilisateurs.get(6), articles.get(6)));
-        commentaires.add(new Commentaire("Bien expliqué.", new Date(), utilisateurs.get(7), articles.get(7)));
+        commentaires.add(new Commentaire("Très utile, merci pour l'effort.", new Date(), utilisateurs.get(6), articles.get(6)));
+        commentaires.add(new Commentaire("Bien expliqué, j'ai tout compris.", new Date(), utilisateurs.get(7), articles.get(7)));
 
-        commentaires.add(new Commentaire("J'ai appris beaucoup.", new Date(), utilisateurs.get(8), articles.get(8)));
-        commentaires.add(new Commentaire("Informations claires.", new Date(), utilisateurs.get(9), articles.get(9)));
+        commentaires.add(new Commentaire("J'ai appris beaucoup de choses nouvelles.", new Date(), utilisateurs.get(8), articles.get(8)));
+        commentaires.add(new Commentaire("Informations claires et bien présentées.", new Date(), utilisateurs.get(9), articles.get(9)));
 
-        commentaires.add(new Commentaire("Contenu utile.", new Date(), utilisateurs.get(10), articles.get(10)));
-        commentaires.add(new Commentaire("Très bon article.", new Date(), utilisateurs.get(11), articles.get(11)));
+        commentaires.add(new Commentaire("Contenu utile pour mieux comprendre.", new Date(), utilisateurs.get(10), articles.get(10)));
+        commentaires.add(new Commentaire("Très bon article, merci pour le partage.", new Date(), utilisateurs.get(11), articles.get(11)));
 
-        commentaires.add(new Commentaire("Article bien rédigé.", new Date(), utilisateurs.get(12), articles.get(12)));
-        commentaires.add(new Commentaire("Merci pour ce contenu.", new Date(), utilisateurs.get(13), articles.get(13)));
+        commentaires.add(new Commentaire("Article bien rédigé et informatif.", new Date(), utilisateurs.get(12), articles.get(12)));
+        commentaires.add(new Commentaire("Merci pour ce contenu détaillé et précis.", new Date(), utilisateurs.get(13), articles.get(13)));
 
-        commentaires.add(new Commentaire("Très informatif.", new Date(), utilisateurs.get(14), articles.get(14)));
-        commentaires.add(new Commentaire("Article clair et précis.", new Date(), utilisateurs.get(0), articles.get(15)));
+        commentaires.add(new Commentaire("Très informatif, merci pour les infos.", new Date(), utilisateurs.get(14), articles.get(14)));
+        commentaires.add(new Commentaire("Article clair et précis sur le sujet.", new Date(), utilisateurs.get(0), articles.get(15)));
 
-        commentaires.add(new Commentaire("Merci pour ces détails.", new Date(), utilisateurs.get(1), articles.get(16)));
-        commentaires.add(new Commentaire("Explications concises.", new Date(), utilisateurs.get(2), articles.get(17)));
+        commentaires.add(new Commentaire("Merci pour ces détails supplémentaires.", new Date(), utilisateurs.get(1), articles.get(16)));
+        commentaires.add(new Commentaire("Explications concises et bien illustrées.", new Date(), utilisateurs.get(2), articles.get(17)));
 
-        commentaires.add(new Commentaire("Très bonne lecture.", new Date(), utilisateurs.get(3), articles.get(18)));
-        commentaires.add(new Commentaire("Très intéressant.", new Date(), utilisateurs.get(4), articles.get(19)));
+        commentaires.add(new Commentaire("Très bonne lecture, j'ai beaucoup apprécié.", new Date(), utilisateurs.get(3), articles.get(18)));
+        commentaires.add(new Commentaire("Très intéressant, j'ai appris beaucoup.", new Date(), utilisateurs.get(4), articles.get(19)));
 
-        commentaires.add(new Commentaire("Article pertinent.", new Date(), utilisateurs.get(5), articles.get(20)));
-        commentaires.add(new Commentaire("Informations utiles.", new Date(), utilisateurs.get(6), articles.get(21)));
+        commentaires.add(new Commentaire("Article pertinent et bien documenté.", new Date(), utilisateurs.get(5), articles.get(20)));
+        commentaires.add(new Commentaire("Informations utiles et bien expliquées.", new Date(), utilisateurs.get(6), articles.get(21)));
 
-        commentaires.add(new Commentaire("Bon contenu.", new Date(), utilisateurs.get(7), articles.get(22)));
-        commentaires.add(new Commentaire("Très bonne analyse.", new Date(), utilisateurs.get(8), articles.get(23)));
+        commentaires.add(new Commentaire("Bon contenu, continuez comme ça.", new Date(), utilisateurs.get(7), articles.get(22)));
+        commentaires.add(new Commentaire("Très bonne analyse, très instructif.", new Date(), utilisateurs.get(8), articles.get(23)));
 
-        commentaires.add(new Commentaire("Merci pour cet article.", new Date(), utilisateurs.get(9), articles.get(24)));
+        commentaires.add(new Commentaire("Merci pour cet article enrichissant.", new Date(), utilisateurs.get(9), articles.get(24)));
 
         return commentaires;
     }
-
 
 
 private List<Article> initArticles(List<Theme> persistedThemes, List<Utilisateur> persistedUtilisateurs) {
