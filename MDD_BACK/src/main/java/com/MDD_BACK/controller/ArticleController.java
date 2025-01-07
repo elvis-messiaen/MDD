@@ -1,11 +1,20 @@
 package com.MDD_BACK.controller;
 
 import com.MDD_BACK.dto.ArticleDTO;
+import com.MDD_BACK.dto.ArticleRequestDTO;
 import com.MDD_BACK.entity.Article;
+import com.MDD_BACK.entity.Theme;
+import com.MDD_BACK.entity.Utilisateur;
 import com.MDD_BACK.service.impl.ArticleServiceImpl;
+import com.MDD_BACK.service.impl.ThemeServiceImpl;
+import com.MDD_BACK.service.impl.UtilisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,14 +24,50 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/article")
 public class ArticleController {
 
+    private static final Logger log = LoggerFactory.getLogger(ArticleController.class);
+
     @Autowired
     private ArticleServiceImpl articleService;
 
+    @Autowired
+    private ThemeServiceImpl themeService;
+
+    @Autowired
+    private UtilisateurServiceImpl utilisateurService;
+
     @PostMapping
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody Article article) {
-        Article savedArticle = articleService.create(article);
-        ArticleDTO articleDTO = convertToDTO(savedArticle);
-        return ResponseEntity.ok(articleDTO);
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleRequestDTO articleRequest) {
+        log.info("Requête reçue pour créer un article : {}", articleRequest);
+
+        Theme theme = themeService.findById(articleRequest.getThemeId()).orElse(null);
+        if (theme == null) {
+            log.error("Le thème avec l'ID {} n'a pas été trouvé.", articleRequest.getThemeId());
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Utilisateur author = utilisateurService.findById(articleRequest.getAuthorId()).orElse(null);
+        if (author == null) {
+            log.error("L'auteur avec l'ID {} n'a pas été trouvé.", articleRequest.getAuthorId());
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Article article = new Article();
+        article.setTitle(articleRequest.getTitle());
+        article.setDescription(articleRequest.getDescription());
+        article.setDate(articleRequest.getDate());
+        article.setTheme(theme);
+        article.setAuthor(author);
+
+        try {
+            log.info("Tentative de création de l'article : {}", article);
+            Article savedArticle = articleService.create(article);
+            ArticleDTO articleDTO = convertToDTO(savedArticle);
+            log.info("Article créé avec succès : {}", savedArticle);
+            return ResponseEntity.ok(articleDTO);
+        } catch (Exception e) {
+            log.error("Erreur lors de la création de l'article : ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -42,7 +87,25 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody Article article) {
+    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleRequestDTO articleRequest) {
+        Theme theme = themeService.findById(articleRequest.getThemeId()).orElse(null);
+        if (theme == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Utilisateur author = utilisateurService.findById(articleRequest.getAuthorId()).orElse(null);
+        if (author == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Article article = new Article();
+        article.setId(id);
+        article.setTitle(articleRequest.getTitle());
+        article.setDescription(articleRequest.getDescription());
+        article.setDate(articleRequest.getDate());
+        article.setTheme(theme);
+        article.setAuthor(author);
+
         Article updatedArticle = articleService.update(id, article);
         if (updatedArticle != null) {
             return ResponseEntity.ok(convertToDTO(updatedArticle));

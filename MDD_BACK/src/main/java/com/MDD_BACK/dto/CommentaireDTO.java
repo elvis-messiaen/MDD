@@ -1,18 +1,19 @@
 package com.MDD_BACK.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class CommentaireDTO {
     private Long id;
     private String description;
     private String authorUsername;
-    private Date date;
+    private LocalDate date;
     private Long articleId;
 
     public CommentaireDTO() {
     }
 
-    public CommentaireDTO(Long id, String description, String authorUsername, Date date, Long articleId) {
+    public CommentaireDTO(Long id, String description, String authorUsername, LocalDate date, Long articleId) {
         this.id = id;
         this.description = description;
         this.authorUsername = authorUsername;
@@ -44,11 +45,11 @@ public class CommentaireDTO {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

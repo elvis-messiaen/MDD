@@ -13,7 +13,6 @@ public interface UtilisateurRepository extends CrudRepository<Utilisateur, Long>
     Optional<Utilisateur> findByEmail(String email);
 
     @Query("SELECT (COUNT(u) > 0) FROM Utilisateur u WHERE u.email = :email")
-
     boolean existsByEmail(String email);
 
     Optional<Utilisateur> findByUsername(String username);

@@ -53,6 +53,10 @@ public class Theme {
         this.utilisateurs = utilisateurs;
     }
 
+    public Theme(Long themeId) {
+        this.id = themeId;
+    }
+
     public Set<Article> getArticles() {
         return articles;
     }

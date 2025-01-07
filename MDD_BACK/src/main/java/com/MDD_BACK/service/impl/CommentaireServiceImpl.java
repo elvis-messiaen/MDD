@@ -7,8 +7,7 @@ import com.MDD_BACK.repository.UtilisateurRepository;
 import com.MDD_BACK.service.ICommentaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +30,7 @@ public class CommentaireServiceImpl implements ICommentaireService {
         Utilisateur author = utilisateurRepository.findByUsername(authorUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Utilisateur not found"));
         commentaire.setAuthor(author);
-        commentaire.setDate(new Date());
+        commentaire.setDate(LocalDate.now());
         return commentaireRepository.save(commentaire);
     }
 

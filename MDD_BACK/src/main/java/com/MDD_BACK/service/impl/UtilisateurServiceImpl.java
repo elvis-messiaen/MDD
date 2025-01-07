@@ -10,8 +10,11 @@ import com.MDD_BACK.service.IUtilisateurService;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,9 +51,9 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
     @Override
     public Utilisateur getLoggedInUtilisateur() {
-        return utilisateurRepository.findByUsername("admin")
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return utilisateurRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
     }
 
     public Optional<UtilisateurResponseDTO> getUserById(Long id) {
@@ -116,7 +119,14 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
         return count > 0;
 
-        }
+    }
+
+    public Optional<Utilisateur> findByUsername(String username) {
+        return utilisateurRepository.findByUsername(username);
+    }
+
+    public Optional<Utilisateur> findById(Long author_id) {
+        return utilisateurRepository.findById(author_id);
+    }
 
 }
-

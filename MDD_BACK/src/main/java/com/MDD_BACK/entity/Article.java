@@ -1,12 +1,16 @@
 package com.MDD_BACK.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "article")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Article {
 
     @Id
@@ -18,7 +22,8 @@ public class Article {
     private String title;
 
     @NonNull
-    private Date date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -38,7 +43,7 @@ public class Article {
     public Article() {
     }
 
-    public Article(Utilisateur author, Date date, String description, String title) {
+    public Article(Utilisateur author, LocalDate date, String description, String title) {
         this.author = author;
         this.date = date;
         this.description = description;
@@ -60,11 +65,11 @@ public class Article {
     }
 
     @NonNull
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@NonNull Date date) {
+    public void setDate(@NonNull LocalDate date) {
         this.date = date;
     }
 

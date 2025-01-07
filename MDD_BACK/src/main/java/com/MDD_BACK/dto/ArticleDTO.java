@@ -1,6 +1,8 @@
 package com.MDD_BACK.dto;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class ArticleDTO {
@@ -8,14 +10,18 @@ public class ArticleDTO {
     private String title;
     private String description;
     private String authorUsername;
-    private Date date;
+    private Long authorId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
     private List<CommentaireDTO> commentaires;
-    private Long themeId; // Ajout de la référence au thème
+    private Long themeId;
 
     public ArticleDTO() {
     }
 
-    public ArticleDTO(Long id, String title, String description, String authorUsername, Date date, List<CommentaireDTO> commentaires, Long themeId) {
+    public ArticleDTO(Long id, String title, String description, String authorUsername, LocalDate date, List<CommentaireDTO> commentaires, Long themeId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -23,6 +29,17 @@ public class ArticleDTO {
         this.date = date;
         this.commentaires = commentaires;
         this.themeId = themeId;
+    }
+
+    public ArticleDTO(Long authorId, String authorUsername, List<CommentaireDTO> commentaires, LocalDate date, String description, Long id, Long themeId, String title) {
+        this.authorId = authorId;
+        this.authorUsername = authorUsername;
+        this.commentaires = commentaires;
+        this.date = date;
+        this.description = description;
+        this.id = id;
+        this.themeId = themeId;
+        this.title = title;
     }
 
     public String getAuthorUsername() {
@@ -33,11 +50,11 @@ public class ArticleDTO {
         this.authorUsername = authorUsername;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -79,5 +96,13 @@ public class ArticleDTO {
 
     public void setThemeId(Long themeId) {
         this.themeId = themeId;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }
