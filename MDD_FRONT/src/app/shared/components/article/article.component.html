@@ -1,0 +1,19 @@
+<div class="container mx-auto mt-10 p-4">
+  <div class="flex justify-between items-center mb-5">
+    <button class="bg-purple-500 text-white rounded px-4 py-2" routerLink="/dashboard/create-article">
+      Créer un article
+    </button>
+    <div class="text-black">
+      Trier par <span class="material-icons">arrow_drop_down</span>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div *ngFor="let article of articles" class="bg-gray-200 rounded-lg p-6" [routerLink]="['/dashboard/detail-article', article.id]">
+      <h2 class="text-lg font-bold mb-2 text-black">{{ article.title }}</h2>
+      <div class="text-sm text-gray-600">
+        {{ article.date | date:'yyyy-MM-dd' }} - {{ article.authorUsername }}
+      </div>
+      <p class="mt-2 text-black">{{ article.description }}</p>
+    </div>
+  </div>
+</div>

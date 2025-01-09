@@ -1,0 +1,34 @@
+<div class="w-full p-4 relative">
+  <div class="flex justify-between items-center">
+    <div class="flex justify-start cursor-pointer" routerLink="">
+      <img src="assets/mdd.png" alt="Logo" class="h-12">
+    </div>
+    <div class="hidden md:flex space-x-4">
+      <a (click)="navigateTo('/dashboard/articles')" routerLinkActive="text-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md cursor-pointer">Articles</a>
+      <a (click)="navigateTo('/dashboard/themes')" routerLinkActive="text-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md cursor-pointer">Thèmes</a>
+      <a (click)="navigateTo('/dashboard/profil')" routerLinkActive="text-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md cursor-pointer">
+        <mat-icon>account_circle</mat-icon>
+      </a>
+    </div>
+    <div class="md:hidden z-50">
+      <button mat-icon-button (click)="toggleMenu()">
+        <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+  <hr class="border-black my-2">
+
+  <!-- Menu Mobile -->
+  <div *ngIf="isMenuOpen" class="md:hidden grid grid-rows-12 h-screen fixed top-0 left-0 w-full bg-white z-40">
+    <div class="row-span-2 flex flex-col items-end space-y-2 mt-4 py-10">
+      <a (click)="navigateTo('/dashboard/articles')" routerLinkActive="bg-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md">Articles</a>
+      <a (click)="navigateTo('/dashboard/themes')" routerLinkActive="text-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md">Thèmes</a>
+    </div>
+    <div class="row-span-9"></div>
+    <div class="row-span-1 flex items-end justify-end pb-4">
+      <a (click)="navigateTo('/dashboard/profil')" routerLinkActive="text-purple-500" class="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md cursor-pointer">
+        <mat-icon>account_circle</mat-icon>
+      </a>
+    </div>
+  </div>
+</div>

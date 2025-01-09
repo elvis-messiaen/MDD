@@ -1,0 +1,46 @@
+<button class="text-black ml-6" (click)="goBack()">
+  <span class="material-icons">arrow_back</span>
+</button>
+<div class="container mx-auto mt-10 p-4 sm:w-4/5">
+  <div class="flex justify-between items-center mb-5">
+    <div class="flex items-center">
+      <div class="text-black text-xl ml-4">
+        {{ article?.title }}
+      </div>
+    </div>
+  </div>
+  <div class="text-sm text-gray-600 mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between text-left">
+    <div class="flex flex-row items-center space-x-2">
+      <span>{{ article?.date | date:'yyyy-MM-dd' }}</span>
+      <span>-</span>
+      <span>{{ article?.authorUsername }}</span>
+    </div>
+    <div class="text-gray-600 sm:mt-0 mt-1">
+      {{ themeTitle }}
+    </div>
+  </div>
+  <div class="text-black mb-4 mx-auto text-left max-w-lg">
+    {{ article?.description }}
+  </div>
+  <hr class="border-black my-4 w-4/5 mx-auto" />
+  <div class="text-black mb-4 text-start">Commentaires</div>
+  <div *ngIf="commentaires && commentaires.length > 0" class="mx-auto max-w-lg">
+    <div *ngFor="let commentaire of commentaires" class="flex flex-col sm:flex-row items-start mb-2">
+      <div class="text-black font-bold sm:mr-4 sm:w-24 w-full sm:text-left text-right mb-1 sm:mb-0">
+        {{ commentaire.authorUsername }}
+      </div>
+      <div class="p-2 w-full sm:bg-gray-200 sm:rounded">
+        <div class="text-black">{{ commentaire.description }}</div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!commentaires || commentaires.length === 0" class="text-black mb-4 text-center">
+    Aucun commentaire disponible
+  </div>
+  <div class="flex flex-col sm:flex-row justify-center mt-4">
+    <textarea class="border rounded p-2 w-full sm:max-w-lg mb-2 sm:mb-0" [(ngModel)]="newComment"></textarea>
+    <button class="bg-purple-500 text-white rounded p-2 sm:ml-2 cursor-pointer" (click)="addComment()">
+      <span class="material-icons">send</span>
+    </button>
+  </div>
+</div>

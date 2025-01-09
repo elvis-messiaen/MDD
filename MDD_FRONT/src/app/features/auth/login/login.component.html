@@ -1,0 +1,56 @@
+<div class="w-full p-4">
+  <div class="flex justify-start">
+    <img src="assets/mdd.png" alt="Logo" class="h-12">
+  </div>
+  <hr class="border-black my-2">
+</div>
+<button mat-icon-button class="mb-5" (click)="goBack()">
+  <mat-icon class="text-3xl mb-4 pb-8 text-black">arrow_back</mat-icon>
+</button>
+<div class="container mx-auto mt-10 p-4 text-center">
+  <h1 class="text-2xl font-bold mb-5">Se connecter</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-4/5 md:w-1/5">
+        <label for="identifier" class="block text-sm font-medium text-left">E-mail ou nom d'utilisateur</label>
+        <input
+          id="identifier"
+          type="text"
+          formControlName="identifier"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        <div *ngIf="loginForm.get('identifier')?.invalid && loginForm.get('identifier')?.touched" class="text-red-500 text-sm mt-1">
+          <p *ngIf="loginForm.get('identifier')?.hasError('required')">Ce champ est obligatoire.</p>
+        </div>
+      </div>
+
+      <div class="w-4/5 md:w-1/5">
+        <label for="password" class="block text-sm font-medium text-left">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-sm mt-1">
+          <p *ngIf="loginForm.get('password')?.hasError('required')">Le mot de passe est obligatoire.</p>
+        </div>
+      </div>
+
+      <button
+        class="w-2/5 md:w-1/5 bg-purple-500 text-white font-bold py-2 rounded"
+        type="submit"
+        [disabled]="loginForm.invalid"
+      >
+        Se connecter
+      </button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-center mt-4">
+  Le formulaire contient des erreurs, veuillez les corriger.
+</div>
+<div *ngIf="loginForm.valid" class="text-green-500 text-center mt-4">
+  Le formulaire est prêt à être soumis.
+</div>

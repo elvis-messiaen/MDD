@@ -1,0 +1,85 @@
+<div class="w-full p-4">
+  <div class="flex justify-start">
+    <img src="assets/mdd.png" alt="Logo" class="h-12">
+  </div>
+  <hr class="border-black my-2">
+</div>
+<button mat-icon-button class="mb-5" (click)="goBack()">
+  <mat-icon class="text-3xl mb-4 pb-8 text-black">arrow_back</mat-icon>
+</button>
+<div class="container mx-auto mt-10 p-4 text-center">
+
+  <h1 class="text-2xl font-bold mb-5">Inscription</h1>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-4/5 md:w-1/5">
+        <label for="username" class="block text-sm font-medium text-left">Nom d'utilisateur</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
+          <div class="text-red-500 text-sm mt-1">
+            <p [@if]="registerForm.get('username')?.hasError('required')">Le nom d'utilisateur est obligatoire.</p>
+            <p @else if="registerForm.get('username')?.hasError('minlength')">Le nom d'utilisateur doit contenir au moins 3 caractères.</p>
+          </div>
+        } @else {
+          <div class="text-sm mt-1">Entrez un nom d'utilisateur valide.</div>
+        }
+      </div>
+
+      <div class="w-4/5 md:w-1/5">
+        <label for="email" class="block text-sm font-medium text-left">Adresse e-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <div class="text-red-500 text-sm mt-1">
+            <p [@if]="registerForm.get('email')?.hasError('required')">L'email est obligatoire.</p>
+            <p @else if="registerForm.get('email')?.hasError('email')">L'email n'est pas valide.</p>
+          </div>
+        } @else {
+          <div class="text-sm mt-1">Entrez une adresse e-mail valide.</div>
+        }
+      </div>
+
+      <div class="w-4/5 md:w-1/5">
+        <label for="password" class="block text-sm font-medium text-left">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+          <div class="text-red-500 text-sm mt-1">
+            <p [@if]="registerForm.get('password')?.hasError('required')">Le mot de passe est obligatoire.</p>
+            <p @else if="registerForm.get('password')?.hasError('minlength')">Le mot de passe doit contenir au moins 8 caractères.</p>
+          </div>
+        } @else {
+          <div class="text-sm mt-1">Entrez un mot de passe valide.</div>
+        }
+      </div>
+
+      <button
+        class="w-2/5 md:w-1/5 bg-purple-500 text-white font-bold py-2 rounded"
+        type="submit"
+        [disabled]="registerForm.invalid"
+      >
+        S'inscrire
+      </button>
+    </div>
+  </form>
+</div>
+
+@if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+  <div class="text-red-500 text-center mt-4">Le formulaire contient des erreurs, veuillez les corriger.</div>
+  <div class="text-gray-500 text-center mt-4">Veuillez remplir tous les champs.</div>
+} @else if (registerForm.valid) {
+  <div class="text-green-500 text-center mt-4">Le formulaire est prêt à être soumis.</div>
+}

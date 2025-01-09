@@ -1,0 +1,68 @@
+<button mat-icon-button class="mb-5" (click)="goBack()">
+  <mat-icon class="text-3xl mb-4 pb-8 text-black">arrow_back</mat-icon>
+</button>
+<div class="container mx-auto mt-10 p-4 text-center">
+  <h1 class="text-2xl font-bold mb-5">Profil</h1>
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-4/5 md:w-1/5">
+        <label for="username" class="block text-sm font-medium text-left">Nom d'utilisateur</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched" class="text-red-500 text-sm mt-1">
+          <p *ngIf="profileForm.get('username')?.hasError('required')">Le nom d'utilisateur est obligatoire.</p>
+          <p *ngIf="profileForm.get('username')?.hasError('minlength')">Le nom d'utilisateur doit contenir au moins 3 caractères.</p>
+        </div>
+      </div>
+
+      <div class="w-4/5 md:w-1/5">
+        <label for="email" class="block text-sm font-medium text-left">Adresse e-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        />
+        <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
+          <p *ngIf="profileForm.get('email')?.hasError('required')">L'email est obligatoire.</p>
+          <p *ngIf="profileForm.get('email')?.hasError('email')">L'email n'est pas valide.</p>
+        </div>
+      </div>
+
+      <button
+        class="w-1/5 md:w-1/5 bg-purple-500 text-white font-bold py-2 rounded"
+        type="submit"
+        [disabled]="profileForm.invalid"
+      >
+        Sauvegarder
+      </button>
+      <h3 (click)="disconnected()" class="text-red-600 cursor-pointer">Se déconnecter</h3>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="formSubmitted && profileForm.invalid" class="text-red-500 text-center mt-4">Le formulaire contient des erreurs, veuillez les corriger.</div>
+<div *ngIf="formSubmitted && profileForm.valid" class="text-green-500 text-center mt-4">Le formulaire est prêt à être soumis.</div>
+<div class="w-4/5 border-t-2 border-black mx-auto mt-10"></div>
+
+<div class="container mx-auto p-4">
+
+  <div class="flex justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-screen-lg p-4">
+      <div *ngFor="let theme of themes" class="bg-gray-200 rounded-lg p-6">
+        <h2 class="text-lg font-bold mb-2">{{ theme.title }}</h2>
+        <p class="mb-4">{{ theme.description }}</p>
+        <button
+          class="block mx-auto bg-purple-500 text-white py-2 px-4 rounded"
+          (click)="unsubscribeTheme(theme.id)"
+        >
+          Se désabonner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
