@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,16 +33,12 @@ public class CommentaireController {
     @GetMapping("/{id}")
     public ResponseEntity<List<CommentaireDTO>> getCommentaireById(@PathVariable Long id) {
         List<Commentaire> commentaires = commentaireService.findByArticleId(id);
-        log.info("Commentaires récupérés pour l'article {} : {}", id, commentaires);
-        if (!commentaires.isEmpty()) {
-            List<CommentaireDTO> commentaireDTOs = commentaires.stream()
-                    .map(this::convertToDTO)
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(commentaireDTOs);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        List<CommentaireDTO> commentaireDTOs = commentaires.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(commentaireDTOs);
     }
+
 
 
     @GetMapping

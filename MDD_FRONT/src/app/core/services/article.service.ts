@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Article } from '../models/interfaces/Article';
 import { Commentaire } from '../models/interfaces/Commentaire';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ArticleToSend } from '../models/interfaces/ArticleToSend';
 import { Theme } from '../models/interfaces/Theme';
 
@@ -30,18 +30,16 @@ export class ArticleService {
 
     if (currentUserId) {
       article.authorId = parseInt(currentUserId, 10);
-    } else {
-      console.log('Aucun utilisateur trouvé');
     }
 
     return this.http.post<ArticleToSend>(this.apiUrl, article, { headers }).pipe(
-      catchError((error) => {
-        let errorMessage = 'Erreur inconnue';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        }
-        return throwError(() => new Error(errorMessage));
-      })
+        catchError((error) => {
+          let errorMessage = 'Erreur inconnue';
+          if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
+          return throwError(() => new Error(errorMessage));
+        })
     );
   }
 
@@ -52,7 +50,7 @@ export class ArticleService {
 
   getArticlesByThemes(themeIds: number[]): Observable<Article[]> {
     return this.getAllArticles().pipe(
-      map(articles => articles.filter(article => themeIds.includes(article.themeId)))
+        map(articles => articles.filter(article => themeIds.includes(article.themeId)))
     );
   }
 
@@ -63,8 +61,15 @@ export class ArticleService {
 
   getCommentairesByArticleId(articleId: number): Observable<Commentaire[]> {
     const headers = this.getAuthHeaders();
-    console.log('articleId', articleId);
-    return this.http.get<Commentaire[]>(`${this.urlArticle}?articleId=${articleId}`, { headers });
+    return this.http.get<Commentaire[]>(`${this.urlArticle}/${articleId}`, { headers }).pipe(
+        catchError(error => {
+          if (error.status === 404) {
+            return of([]);
+          } else {
+            return throwError(error);
+          }
+        })
+    );
   }
 
   getAllThemes(): Observable<Theme[]> {

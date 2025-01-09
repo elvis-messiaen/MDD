@@ -14,6 +14,8 @@ import java.util.Optional;
 @Service
 public class CommentaireServiceImpl implements ICommentaireService {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CommentaireServiceImpl.class);
+
     @Autowired
     private final CommentaireRepository commentaireRepository;
 
@@ -37,6 +39,7 @@ public class CommentaireServiceImpl implements ICommentaireService {
 
     @Override
     public List<Commentaire> findByArticleId(Long id) {
+        List<Commentaire> commentaires = commentaireRepository.findByArticleId(id);
         return commentaireRepository.findByArticleId(id);
     }
 

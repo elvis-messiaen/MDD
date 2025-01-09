@@ -42,7 +42,6 @@ export class DetailArticleComponent implements OnInit {
     if (articleId) {
       this.articleService.getArticleById(+articleId).subscribe((article) => {
         this.article = article;
-        console.log("Article récupéré dans ngOnInit DetailArticleComponent :", article);
         this.loadCommentaires(+articleId);
         this.loadThemeTitle(article.themeId);
       });
@@ -60,17 +59,15 @@ export class DetailArticleComponent implements OnInit {
   private loadCommentaires(articleId: number): void {
     this.articleService.getCommentairesByArticleId(articleId).subscribe((commentaires) => {
       this.commentaires = commentaires;
-      console.log(" idde l'author", this.commentaires[0].authorUsername);
-      console.log("Commentaires récupérés pour l'article dans loadCommentaires :", commentaires);
     });
   }
+
 
   addComment(): void {
 
     if (this.newComment.trim() && this.article) {
       this.authService.getUtilisateurProfile().pipe(
         tap((utilisateur) => {
-          console.log("User profile fetched:", utilisateur);
         }),
         switchMap((utilisateur) => {
           const commentaire: Commentaire = {

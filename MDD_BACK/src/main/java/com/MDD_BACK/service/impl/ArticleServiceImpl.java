@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements IArticleService {
+
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ArticleServiceImpl.class);
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -49,7 +52,10 @@ public class ArticleServiceImpl implements IArticleService {
         article.setTheme(theme);
         article.setAuthor(utilisateur);
         article.setDate(LocalDate.now());
+        article.setCommentaires(new ArrayList<>());
+
         Article savedArticle = articleRepository.save(article);
+        log.debug("Article créé avec des commentaires : {}", savedArticle.getCommentaires());
         return savedArticle;
     }
 

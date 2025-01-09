@@ -92,6 +92,9 @@ public class ArticleController {
         List<ArticleDTO> articleDTOS = articles.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        articleDTOS.forEach(articleDTO -> log.debug("Article ID: {}, Commentaires: {}", articleDTO.getId(), articleDTO.getCommentaires()));
+
         return ResponseEntity.ok(articleDTOS);
     }
 
