@@ -5,6 +5,8 @@ import com.MDD_BACK.entity.Article;
 import com.MDD_BACK.entity.Commentaire;
 import com.MDD_BACK.entity.Utilisateur;
 import com.MDD_BACK.service.impl.CommentaireServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/commentaire")
 public class CommentaireController {
+
+    private static final Logger log = LoggerFactory.getLogger(CommentaireController.class);
 
     @Autowired
     private CommentaireServiceImpl commentaireService;
@@ -29,11 +33,19 @@ public class CommentaireController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommentaireDTO> getCommentaireById(@PathVariable Long id) {
-        Optional<Commentaire> commentaire = commentaireService.findById(id);
-        return commentaire.map(value -> ResponseEntity.ok(convertToDTO(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<CommentaireDTO>> getCommentaireById(@PathVariable Long id) {
+        List<Commentaire> commentaires = commentaireService.findByArticleId(id);
+        log.info("Commentaires récupérés pour l'article {} : {}", id, commentaires);
+        if (!commentaires.isEmpty()) {
+            List<CommentaireDTO> commentaireDTOs = commentaires.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(commentaireDTOs);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @GetMapping
     public ResponseEntity<List<CommentaireDTO>> getAllCommentaires() {

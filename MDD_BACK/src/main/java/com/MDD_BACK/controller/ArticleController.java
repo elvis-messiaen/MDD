@@ -2,20 +2,23 @@ package com.MDD_BACK.controller;
 
 import com.MDD_BACK.dto.ArticleDTO;
 import com.MDD_BACK.dto.ArticleRequestDTO;
+import com.MDD_BACK.dto.CommentaireDTO;
 import com.MDD_BACK.entity.Article;
+import com.MDD_BACK.entity.Commentaire;
 import com.MDD_BACK.entity.Theme;
 import com.MDD_BACK.entity.Utilisateur;
 import com.MDD_BACK.service.impl.ArticleServiceImpl;
+import com.MDD_BACK.service.impl.CommentaireServiceImpl;
 import com.MDD_BACK.service.impl.ThemeServiceImpl;
 import com.MDD_BACK.service.impl.UtilisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,19 +38,18 @@ public class ArticleController {
     @Autowired
     private UtilisateurServiceImpl utilisateurService;
 
+    @Autowired
+    private CommentaireServiceImpl commentaireService;
+
     @PostMapping
     public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleRequestDTO articleRequest) {
-        log.info("Requête reçue pour créer un article : {}", articleRequest);
-
         Theme theme = themeService.findById(articleRequest.getThemeId()).orElse(null);
         if (theme == null) {
-            log.error("Le thème avec l'ID {} n'a pas été trouvé.", articleRequest.getThemeId());
             return ResponseEntity.badRequest().body(null);
         }
 
         Utilisateur author = utilisateurService.findById(articleRequest.getAuthorId()).orElse(null);
         if (author == null) {
-            log.error("L'auteur avec l'ID {} n'a pas été trouvé.", articleRequest.getAuthorId());
             return ResponseEntity.badRequest().body(null);
         }
 
@@ -57,15 +59,13 @@ public class ArticleController {
         article.setDate(articleRequest.getDate());
         article.setTheme(theme);
         article.setAuthor(author);
+        article.setCommentaires(new ArrayList<>());
 
         try {
-            log.info("Tentative de création de l'article : {}", article);
             Article savedArticle = articleService.create(article);
             ArticleDTO articleDTO = convertToDTO(savedArticle);
-            log.info("Article créé avec succès : {}", savedArticle);
             return ResponseEntity.ok(articleDTO);
         } catch (Exception e) {
-            log.error("Erreur lors de la création de l'article : ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -73,8 +73,17 @@ public class ArticleController {
     @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
         Optional<Article> article = articleService.findById(id);
-        return article.map(value -> ResponseEntity.ok(convertToDTO(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if (article.isPresent()) {
+            ArticleDTO articleDTO = convertToDTO(article.get());
+            List<CommentaireDTO> commentaires = commentaireService.findByArticleId(id).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            articleDTO.setCommentaires(commentaires);
+            return ResponseEntity.ok(articleDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
@@ -130,4 +139,14 @@ public class ArticleController {
         articleDTO.setThemeId(article.getTheme().getId());
         return articleDTO;
     }
+    private CommentaireDTO convertToDTO(Commentaire commentaire) {
+        CommentaireDTO commentaireDTO = new CommentaireDTO();
+        commentaireDTO.setId(commentaire.getId());
+        commentaireDTO.setDescription(commentaire.getDescription());
+        commentaireDTO.setAuthorUsername(commentaire.getAuthor().getUsername());
+        commentaireDTO.setDate(commentaire.getDate());
+        commentaireDTO.setArticleId(commentaire.getArticle().getId());
+        return commentaireDTO;
+    }
+
 }

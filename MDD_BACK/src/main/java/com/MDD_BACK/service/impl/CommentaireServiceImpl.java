@@ -36,8 +36,8 @@ public class CommentaireServiceImpl implements ICommentaireService {
 
 
     @Override
-    public Optional<Commentaire> findById(Long id) {
-        return commentaireRepository.findById(id);
+    public List<Commentaire> findByArticleId(Long id) {
+        return commentaireRepository.findByArticleId(id);
     }
 
     @Override

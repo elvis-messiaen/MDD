@@ -9,7 +9,7 @@ public interface ICommentaireService {
 
     Commentaire create(Commentaire commentaire, String authorUsername);
 
-    Optional<Commentaire> findById(Long id);
+    List<Commentaire> findByArticleId(Long articleId);
 
     List<Commentaire> findAll();
 

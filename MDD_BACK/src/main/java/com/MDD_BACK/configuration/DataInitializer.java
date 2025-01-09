@@ -247,6 +247,7 @@ private List<Article> initArticles(List<Theme> persistedThemes, List<Utilisateur
             "Cet article explore les différentes méthodes pour apprendre une nouvelle langue rapidement et efficacement, en utilisant des techniques modernes et des ressources en ligne.",
             "Méthodes efficaces pour apprendre une nouvelle langue"
     );
+
     article1.setTheme(persistedThemes.get(0));
     articles.add(article1);
 
