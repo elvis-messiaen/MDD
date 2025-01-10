@@ -1,8 +1,21 @@
 package com.MDD_BACK.dto;
 
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class RegisterRequestDTO {
+
+    @NotBlank(message = "Le nom d'utilisateur ne peut pas être vide")
     private String username;
+
+    @NotBlank(message = "L'email ne peut pas être vide")
+    @Email(message = "L'email doit être valide")
     private String email;
+
+    @NotBlank(message = "Le mot de passe ne peut pas être vide")
+    @Size(min = 6, message = "Le mot de passe doit avoir au moins 6 caractères")
     private String password;
 
     public RegisterRequestDTO() {}
@@ -37,4 +50,3 @@ public class RegisterRequestDTO {
         this.password = password;
     }
 }
-

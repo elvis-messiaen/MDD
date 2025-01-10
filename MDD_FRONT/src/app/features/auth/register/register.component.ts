@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import {AuthService} from '../../../core/services/authService.service';
 import {RouterModule, Router} from '@angular/router';
+import {catchError, switchMap, tap} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -27,6 +29,7 @@ export class RegisterComponent {
   registrationSuccess = false;
   registrationError = '';
   formSubmitted = false;
+  emailErrorMessage: string | null = null;
   private authService = inject(AuthService);
 
 
@@ -47,27 +50,39 @@ export class RegisterComponent {
 
   onSubmit(): void {
     this.formSubmitted = true;
+    this.registrationError = '';
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
       this.registerUser(formData);
-
     }
   }
 
   private registerUser(data: { username: string; email: string; password: string }) {
-    this.authService.registerUser(data).subscribe({
-      next: (response) => {
-        this.registrationSuccess = true;
-        this.registrationError = '';
-        this.router.navigate(['/login']);
-      },
-      error: (error) => {
-        this.registrationSuccess = false;
+    this.authService.checkEmailUsernameExists(data.email, data.username).pipe(
+      switchMap((exists: boolean) => {
+        if (!exists) {
+          return this.authService.registerUser(data).pipe(
+            tap(() => {
+              this.registrationSuccess = true;
+              this.registrationError = '';
+              this.router.navigate(['/login']);
+            }),
+            catchError((error: any) => {
+              this.registrationError = error.message;
+              return of(null);
+            })
+          );
+        } else {
+          this.registrationError = "Nom d'utilisateur ou email déjà existant";
+          return of(null);
+        }
+      }),
+      catchError((error: any) => {
         this.registrationError = error.message;
-      },
-    });
+        return of(null);
+      })
+    ).subscribe();
   }
-
   goBack(): void {
     this.router.navigate(['']);
   }

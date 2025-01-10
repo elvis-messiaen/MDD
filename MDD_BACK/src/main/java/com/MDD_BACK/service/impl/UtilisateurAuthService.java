@@ -42,11 +42,11 @@ public class UtilisateurAuthService {
 
     @Transactional
     public String register(RegisterRequestDTO utilisateurDTO) {
-        log.info("Tentative d'enregistrement pour : {}", utilisateurDTO.getUsername());
         if (utilisateurRepository.existsByUsername(utilisateurDTO.getUsername())) {
             log.error("Le nom d'utilisateur est déjà pris : {}", utilisateurDTO.getUsername());
             throw new RuntimeException("Le nom d'utilisateur est déjà pris");
         }
+
         if (utilisateurRepository.existsByEmail(utilisateurDTO.getEmail())) {
             log.error("L'email est déjà pris : {}", utilisateurDTO.getEmail());
             throw new RuntimeException("L'email est déjà pris");
@@ -57,21 +57,18 @@ public class UtilisateurAuthService {
         utilisateur.setEmail(utilisateurDTO.getEmail());
         utilisateur.setPassword(passwordEncoder.encode(utilisateurDTO.getPassword()));
 
-        log.info("Utilisateur créé avec succès avant assignation des rôles : {}", utilisateurDTO.getUsername());
-
         Role role = roleRepository.findByName("USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         utilisateur.setRole(roles);
-
         utilisateurRepository.save(utilisateur);
-        log.info("Utilisateur enregistré dans la base de données : {}", utilisateurDTO.getUsername());
 
         String token = generateToken(utilisateur);
-        log.info("Token généré pour l'utilisateur : {}", utilisateurDTO.getUsername());
         return token;
     }
+
+
 
     private String generateToken(Utilisateur utilisateur) {
         return Jwts.builder()
@@ -107,4 +104,11 @@ public class UtilisateurAuthService {
         return false;
     }
 
+    public boolean existsByEmail(String email) {
+        return utilisateurRepository.existsByEmail(email);
+    }
+
+    public boolean existsByUsername(String username) {
+        return utilisateurRepository.existsByUsername(username);
+    }
 }

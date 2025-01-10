@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import com.MDD_BACK.dto.AuthDTO.TokenResponse;
 
+import java.util.Collections;
+
 @RestController
 @RequestMapping("/auth")
 @Validated
 public class AuthController {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private UtilisateurAuthService utilisateurAuthService;
@@ -31,21 +34,19 @@ public class AuthController {
                     @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @io.swagger.v3.oas.annotations.media.Content),
-            @ApiResponse(responseCode = "409", description = "Le nom d'utilisateur ou l'email est déjà pris.", content = @io.swagger.v3.oas.annotations.media.Content)
+            @ApiResponse(responseCode = "409", description = "Le nom d'utilisateur ou l'email est déjà pris.")
     })
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequestDTO registerRequest) {
-        if (registerRequest.getUsername() == null || registerRequest.getUsername().trim().isEmpty() ||
-                registerRequest.getEmail() == null || registerRequest.getEmail().trim().isEmpty() ||
-                registerRequest.getPassword() == null || registerRequest.getPassword().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{}");
+        if (utilisateurAuthService.existsByEmail(registerRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDTO("L'email est déjà pris"));
         }
 
         try {
             String token = utilisateurAuthService.register(registerRequest);
             return ResponseEntity.status(HttpStatus.OK).body(new TokenResponse(token));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDTO("Conflict"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO("Erreur interne"));
         }
     }
 
@@ -98,6 +99,21 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Vérifie si l'email existe", description = "Vérifie si l'email existe")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "L'email est disponible"),
+            @ApiResponse(responseCode = "409", description = "L'email est déjà pris")
+    })
+    @GetMapping("/exists/{email}/{username}")
+    public ResponseEntity<?> checkEmailOrUsernameExists(@PathVariable String email, @PathVariable String username) {
+        boolean emailExists = utilisateurAuthService.existsByEmail(email);
+        boolean usernameExists = utilisateurAuthService.existsByUsername(username);
 
+        if (emailExists || usernameExists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("message", "Le nom d'utilisateur ou l'email est déjà pris"));
+        } else {
+            return ResponseEntity.ok(Collections.singletonMap("message", "Disponible"));
+        }
+    }
 
 }

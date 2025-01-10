@@ -56,6 +56,7 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+
     public Optional<UtilisateurResponseDTO> getUserById(Long id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         UtilisateurResponseDTO utilisateurResponseDTO = new UtilisateurResponseDTO();

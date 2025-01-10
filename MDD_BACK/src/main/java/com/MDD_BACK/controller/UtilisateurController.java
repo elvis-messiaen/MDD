@@ -4,11 +4,11 @@ import com.MDD_BACK.dto.UtilisateurDTO;
 import com.MDD_BACK.dto.UtilisateurResponseDTO;
 import com.MDD_BACK.service.impl.UtilisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -78,4 +78,5 @@ public class UtilisateurController {
     public void deleteUtilisateurById(@PathVariable Long id) {
         utilisateurService.deleteUtilisateurById(id);
     }
+
 }

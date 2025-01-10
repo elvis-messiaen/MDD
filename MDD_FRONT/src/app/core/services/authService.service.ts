@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {map, Observable, of, throwError} from 'rxjs';
 import {Utilisateur} from '../models/interfaces/Utilisateur';
-import {tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class AuthService {
   private loginUrl = 'http://localhost:8080/auth/login';
   private profil = 'http://localhost:8080/auth/me';
   private logoutUrl = 'http://localhost:8080/auth/logout';
+  private checkEmailUrl = 'http://localhost:8080/auth/exists/emailusername';
 
   private currentUserId: number | null = null;
 
@@ -33,8 +34,6 @@ export class AuthService {
       })
     );
   }
-
-
 
   getUtilisateurProfile(): Observable<Utilisateur> {
     const token = localStorage.getItem('authToken');
@@ -72,7 +71,26 @@ export class AuthService {
       });
     }
   }
-
-
-
+  checkEmailUsernameExists(email: string, username: string): Observable<boolean> {
+    return this.http.get<any>(`http://localhost:8080/auth/exists/${email}/${username}`, { observe: 'response' }).pipe(
+      map(response => {
+        const body: { message: string } = response.body;
+        const message = body.message;
+        if (response.status === 200 && message === "Disponible") {
+          return false;
+        } else if (response.status === 409 && message === "Le nom d'utilisateur ou l'email est déjà pris") {
+          return true;
+        } else {
+          throw new Error('Unexpected response status: ' + response.status);
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 409) {
+          return throwError(() => new Error("Le nom d'utilisateur ou l'email est déjà pris"));
+        } else {
+          return throwError(() => new Error("Erreur inconnue avec le statut: " + error.status));
+        }
+      })
+    );
+  }
 }
