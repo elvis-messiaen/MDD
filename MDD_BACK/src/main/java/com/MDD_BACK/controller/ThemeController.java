@@ -11,19 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/theme")
 public class ThemeController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ThemeController.class);
 
     @Autowired
     private ThemeServiceImpl themeService;
@@ -84,19 +80,15 @@ public class ThemeController {
     @PostMapping("/{id}/subscribe")
     public ResponseEntity<Map<String, String>> subscribeToTheme(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();
-        logger.info("Reçu utilisateurId: {}", utilisateurId);
-        logger.info("Reçu themeId: {}", id);
 
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(utilisateurId);
         Optional<Theme> themeOptional = themeRepository.findById(id);
 
         if (!utilisateurOptional.isPresent()) {
-            logger.warn("Utilisateur non trouvé");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Utilisateur non trouvé"));
         }
 
         if (!themeOptional.isPresent()) {
-            logger.warn("Thème non trouvé");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Thème non trouvé"));
         }
 
@@ -104,15 +96,12 @@ public class ThemeController {
         Theme theme = themeOptional.get();
 
         if (theme.getUtilisateurs().contains(utilisateur)) {
-            logger.info("Utilisateur déjà abonné à ce thème, ignoré");
             return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Utilisateur déjà abonné à ce thème"));
         }
 
-        logger.info("Abonnement de l'utilisateur au thème en cours");
         theme.getUtilisateurs().add(utilisateur);
         themeRepository.save(theme);
 
-        logger.info("Abonnement réussi");
         return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", "Abonnement réussi"));
     }
 
@@ -120,19 +109,15 @@ public class ThemeController {
     @PostMapping("/{id}/unsubscribe")
     public ResponseEntity<Map<String, String>> unsubscribeFromTheme(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();
-        logger.info("Reçu utilisateurId: {}", utilisateurId);
-        logger.info("Reçu themeId: {}", id);
 
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(utilisateurId);
         Optional<Theme> themeOptional = themeRepository.findById(id);
 
         if (!utilisateurOptional.isPresent()) {
-            logger.warn("Utilisateur non trouvé");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Utilisateur non trouvé"));
         }
 
         if (!themeOptional.isPresent()) {
-            logger.warn("Thème non trouvé");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Thème non trouvé"));
         }
 
@@ -140,23 +125,18 @@ public class ThemeController {
         Theme theme = themeOptional.get();
 
         if (!theme.getUtilisateurs().contains(utilisateur)) {
-            logger.warn("Utilisateur non abonné à ce thème");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "Utilisateur non abonné à ce thème"));
         }
 
-        logger.info("Désabonnement de l'utilisateur au thème en cours");
         theme.getUtilisateurs().remove(utilisateur);
         themeRepository.save(theme);
 
-        logger.info("Désabonnement réussi");
         return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Désabonnement réussi"));
     }
 
     @PostMapping("/{id}/isSubscribed")
     public ResponseEntity<Map<String, Boolean>> isSubscribed(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();
-        logger.info("Vérification de l'abonnement pour utilisateurId: {}", utilisateurId);
-        logger.info("Pour themeId: {}", id);
 
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(utilisateurId);
         Optional<Theme> themeOptional = themeRepository.findById(id);

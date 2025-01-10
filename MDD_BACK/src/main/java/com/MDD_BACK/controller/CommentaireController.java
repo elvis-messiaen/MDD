@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,12 @@ public class CommentaireController {
     @Autowired
     private CommentaireServiceImpl commentaireService;
 
+    @Operation(summary = "Créer un nouveau commentaire", description = "Crée un nouveau commentaire basé sur les données fournies.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            })
+    })
     @PostMapping
     public ResponseEntity<CommentaireDTO> createCommentaire(@RequestBody CommentaireDTO commentaireDTO, @RequestParam String authorUsername) {
         Commentaire commentaire = convertToEntity(commentaireDTO);
@@ -30,6 +41,13 @@ public class CommentaireController {
         return ResponseEntity.ok(savedCommentaireDTO);
     }
 
+    @Operation(summary = "Obtenir les commentaires par ID d'article", description = "Récupère les commentaires d'un article spécifique en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            }),
+            @ApiResponse(responseCode = "404", description = "Commentaire non trouvé", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<List<CommentaireDTO>> getCommentaireById(@PathVariable Long id) {
         List<Commentaire> commentaires = commentaireService.findByArticleId(id);
@@ -39,8 +57,12 @@ public class CommentaireController {
         return ResponseEntity.ok(commentaireDTOs);
     }
 
-
-
+    @Operation(summary = "Obtenir tous les commentaires", description = "Récupère tous les commentaires disponibles.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            })
+    })
     @GetMapping
     public ResponseEntity<List<CommentaireDTO>> getAllCommentaires() {
         List<Commentaire> commentaires = commentaireService.findAll();
@@ -50,6 +72,13 @@ public class CommentaireController {
         return ResponseEntity.ok(commentaireDTOS);
     }
 
+    @Operation(summary = "Mettre à jour un commentaire", description = "Met à jour un commentaire existant en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            }),
+            @ApiResponse(responseCode = "404", description = "Commentaire non trouvé", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @PutMapping("/{id}")
     public ResponseEntity<CommentaireDTO> updateCommentaire(@PathVariable Long id, @RequestBody CommentaireDTO commentaireDTO) {
         Commentaire commentaire = convertToEntity(commentaireDTO);
@@ -61,6 +90,10 @@ public class CommentaireController {
         }
     }
 
+    @Operation(summary = "Supprimer un commentaire", description = "Supprime un commentaire en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Aucun contenu", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCommentaire(@PathVariable Long id) {
         commentaireService.deleteById(id);

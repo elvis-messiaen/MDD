@@ -37,6 +37,36 @@ export class DetailArticleComponent implements OnInit {
   private commentaireService = inject(CommentaireService);
   private authService = inject(AuthService);
 
+
+  addComment(): void {
+    if (this.newComment.trim() && this.article) {
+      this.authService.getUtilisateurProfile().pipe(
+          tap((utilisateur) => {
+          }),
+          switchMap((utilisateur) => {
+            const commentaire: Commentaire = {
+              description: this.newComment,
+              articleId: this.article!.id,
+              authorUsername: utilisateur.username,
+              date: new Date().toISOString().split('T')[0]
+            };
+
+            return this.commentaireService.addCommentaire(commentaire, utilisateur.username);
+          }),
+          tap(() => {
+            this.loadCommentaires(this.article!.id);
+            this.newComment = '';
+          }),
+          catchError((error) => {
+            return of(null);
+          })
+      ).subscribe();
+    }
+  }
+  goBack(): void {
+    this.router.navigate(['dashboard/articles']);
+  }
+
   ngOnInit(): void {
     const articleId = this.route.snapshot.paramMap.get('id');
     if (articleId) {
@@ -62,34 +92,4 @@ export class DetailArticleComponent implements OnInit {
     });
   }
 
-
-  addComment(): void {
-
-    if (this.newComment.trim() && this.article) {
-      this.authService.getUtilisateurProfile().pipe(
-        tap((utilisateur) => {
-        }),
-        switchMap((utilisateur) => {
-          const commentaire: Commentaire = {
-            description: this.newComment,
-            articleId: this.article!.id,
-            authorUsername: utilisateur.username,
-            date: new Date().toISOString().split('T')[0]
-          };
-
-          return this.commentaireService.addCommentaire(commentaire, utilisateur.username);
-        }),
-        tap(() => {
-          this.loadCommentaires(this.article!.id);
-          this.newComment = '';
-        }),
-        catchError((error) => {
-          return of(null);
-        })
-      ).subscribe();
-    }
-  }
-  goBack(): void {
-    this.router.navigate(['dashboard/articles']);
-  }
 }

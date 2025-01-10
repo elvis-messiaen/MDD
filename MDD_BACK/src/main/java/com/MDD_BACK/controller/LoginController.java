@@ -36,7 +36,7 @@ public class LoginController {
     @Operation(summary = "Authentifie l'utilisateur", description = "Authentifie l'utilisateur")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "L'utilisateur est connecté."),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "401", description = "Non autorisé"),
             @ApiResponse(responseCode = "400", description = "Le nom d'utilisateur ou le mot de passe n'est pas fourni.")
     })
     @PostMapping("/login")

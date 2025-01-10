@@ -55,7 +55,6 @@ public class ArticleServiceImpl implements IArticleService {
         article.setCommentaires(new ArrayList<>());
 
         Article savedArticle = articleRepository.save(article);
-        log.debug("Article créé avec des commentaires : {}", savedArticle.getCommentaires());
         return savedArticle;
     }
 

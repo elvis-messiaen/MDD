@@ -17,6 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,14 @@ public class ArticleController {
     @Autowired
     private CommentaireServiceImpl commentaireService;
 
+    @Operation(summary = "Créer un nouvel article", description = "Crée un nouvel article basé sur les données fournies.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            }),
+            @ApiResponse(responseCode = "400", description = "Requête incorrecte", content = @io.swagger.v3.oas.annotations.media.Content),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @PostMapping
     public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleRequestDTO articleRequest) {
         Theme theme = themeService.findById(articleRequest.getThemeId()).orElse(null);
@@ -70,6 +82,13 @@ public class ArticleController {
         }
     }
 
+    @Operation(summary = "Obtenir un article par ID", description = "Récupère un article spécifique en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            }),
+            @ApiResponse(responseCode = "404", description = "Article non trouvé", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
         Optional<Article> article = articleService.findById(id);
@@ -86,6 +105,12 @@ public class ArticleController {
         }
     }
 
+    @Operation(summary = "Obtenir tous les articles", description = "Récupère tous les articles disponibles.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            })
+    })
     @GetMapping
     public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         List<Article> articles = articleService.findAll();
@@ -98,6 +123,14 @@ public class ArticleController {
         return ResponseEntity.ok(articleDTOS);
     }
 
+    @Operation(summary = "Mettre à jour un article", description = "Met à jour un article existant en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
+            }),
+            @ApiResponse(responseCode = "400", description = "Requête incorrecte", content = @io.swagger.v3.oas.annotations.media.Content),
+            @ApiResponse(responseCode = "404", description = "Article non trouvé", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleRequestDTO articleRequest) {
         Theme theme = themeService.findById(articleRequest.getThemeId()).orElse(null);
@@ -126,6 +159,10 @@ public class ArticleController {
         }
     }
 
+    @Operation(summary = "Supprimer un article", description = "Supprime un article en utilisant son ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Aucun contenu", content = @io.swagger.v3.oas.annotations.media.Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         articleService.deleteById(id);
