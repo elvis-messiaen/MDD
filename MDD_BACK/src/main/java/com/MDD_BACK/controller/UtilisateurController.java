@@ -21,6 +21,11 @@ public class UtilisateurController {
     @Autowired
     private UtilisateurServiceImpl utilisateurService;
 
+    /**
+     * Obtenir tous les utilisateurs.
+     *
+     * @return Une liste de tous les utilisateurs disponibles.
+     */
     @Operation(summary = "Obtenir tous les utilisateurs", description = "Récupère tous les utilisateurs disponibles.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -32,6 +37,12 @@ public class UtilisateurController {
         return utilisateurService.findAll();
     }
 
+    /**
+     * Obtenir un utilisateur par ID.
+     *
+     * @param id L'ID de l'utilisateur à récupérer.
+     * @return L'utilisateur correspondant à l'ID fourni.
+     */
     @Operation(summary = "Obtenir un utilisateur par ID", description = "Récupère un utilisateur spécifique en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -45,6 +56,12 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurResponseDTO);
     }
 
+    /**
+     * Créer un nouvel utilisateur.
+     *
+     * @param userDTO Les détails de l'utilisateur à créer.
+     * @return L'utilisateur créé.
+     */
     @Operation(summary = "Créer un nouvel utilisateur", description = "Crée un nouvel utilisateur basé sur les données fournies.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -56,6 +73,13 @@ public class UtilisateurController {
         return utilisateurService.createUtilisateur(userDTO);
     }
 
+    /**
+     * Mettre à jour un utilisateur.
+     *
+     * @param id L'ID de l'utilisateur à mettre à jour.
+     * @param utilisateurDTO Les nouvelles données de l'utilisateur.
+     * @return L'utilisateur mis à jour.
+     */
     @Operation(summary = "Mettre à jour un utilisateur", description = "Met à jour un utilisateur existant en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -69,6 +93,11 @@ public class UtilisateurController {
         return utilisateurService.updateUtilisateur(id, utilisateurDTO);
     }
 
+    /**
+     * Supprimer un utilisateur.
+     *
+     * @param id L'ID de l'utilisateur à supprimer.
+     */
     @Operation(summary = "Supprimer un utilisateur", description = "Supprime un utilisateur en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aucun contenu", content = @io.swagger.v3.oas.annotations.media.Content)

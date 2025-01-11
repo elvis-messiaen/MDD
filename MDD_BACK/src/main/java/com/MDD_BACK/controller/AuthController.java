@@ -1,6 +1,5 @@
 package com.MDD_BACK.controller;
 
-
 import com.MDD_BACK.dto.RegisterRequestDTO;
 import com.MDD_BACK.dto.ResponseDTO;
 import com.MDD_BACK.dto.UtilisateurResponseDTO;
@@ -28,6 +27,12 @@ public class AuthController {
     @Autowired
     private UtilisateurAuthService utilisateurAuthService;
 
+    /**
+     * Enregistrer un nouvel utilisateur.
+     *
+     * @param registerRequest Les détails d'enregistrement de l'utilisateur.
+     * @return Une réponse avec un token d'authentification.
+     */
     @Operation(summary = "Enregistrer un nouvel utilisateur", description = "Enregistre un nouvel utilisateur")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -50,6 +55,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * Déconnecter l'utilisateur.
+     *
+     * @return Une réponse indiquant que l'utilisateur a été déconnecté avec succès.
+     */
     @Operation(summary = "Déconnecter l'utilisateur", description = "Déconnecte l'utilisateur")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @io.swagger.v3.oas.annotations.media.Content)
@@ -61,7 +71,11 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Obtenir les informations de l'utilisateur authentifié.
+     *
+     * @return Les informations de l'utilisateur actuellement authentifié.
+     */
     @Operation(summary = "Obtenir les informations de l'utilisateur authentifié", description = "Renvoie les informations de l'utilisateur actuellement authentifié.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -81,6 +95,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Mettre à jour les informations de l'utilisateur.
+     *
+     * @param utilisateurResponseDTO Les nouvelles informations de l'utilisateur.
+     * @return Une réponse indiquant le succès ou l'échec de la mise à jour.
+     */
     @Operation(summary = "Mettre à jour les informations de l'utilisateur", description = "Met à jour les informations de l'utilisateur actuellement authentifié.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -99,6 +119,13 @@ public class AuthController {
         }
     }
 
+    /**
+     * Vérifie si l'email ou le nom d'utilisateur existe déjà.
+     *
+     * @param email L'email à vérifier.
+     * @param username Le nom d'utilisateur à vérifier.
+     * @return Une réponse indiquant la disponibilité de l'email ou du nom d'utilisateur.
+     */
     @Operation(summary = "Vérifie si l'email existe", description = "Vérifie si l'email existe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "L'email est disponible"),
@@ -115,5 +142,4 @@ public class AuthController {
             return ResponseEntity.ok(Collections.singletonMap("message", "Disponible"));
         }
     }
-
 }

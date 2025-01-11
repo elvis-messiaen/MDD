@@ -159,16 +159,22 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<sourcepath>src/main/java</sourcepath>
+					<outputDirectory>/Users/OpenClassrooms/Soutenance/MESSIAEN_Elvis_Projet6_ORION _/Messiaen_ELvis_6_ORION_10_01_2025/Javadoc</outputDirectory>
+					<additionalOptions>
+						<additionalOption>-subpackages</additionalOption>
+						<additionalOption>com.MDD_BACK.controller</additionalOption>
+					</additionalOptions>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

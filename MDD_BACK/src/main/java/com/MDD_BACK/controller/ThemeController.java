@@ -30,6 +30,12 @@ public class ThemeController {
     @Autowired
     private ThemeRepository themeRepository;
 
+    /**
+     * Créer un nouveau thème.
+     *
+     * @param theme Les détails du thème à créer.
+     * @return Le thème créé.
+     */
     @PostMapping
     public ResponseEntity<ThemeDTO> createTheme(@RequestBody Theme theme) {
         Theme savedTheme = themeService.create(theme);
@@ -37,6 +43,12 @@ public class ThemeController {
         return ResponseEntity.ok(themeDTO);
     }
 
+    /**
+     * Obtenir un thème par ID.
+     *
+     * @param id L'ID du thème à récupérer.
+     * @return Le thème correspondant à l'ID fourni.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ThemeDTO> getThemeById(@PathVariable Long id) {
         Optional<Theme> theme = themeService.findById(id);
@@ -44,6 +56,11 @@ public class ThemeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Obtenir tous les thèmes.
+     *
+     * @return Une liste de tous les thèmes disponibles.
+     */
     @GetMapping
     public ResponseEntity<List<ThemeDTO>> getAllThemes() {
         List<Theme> themes = themeService.findAll();
@@ -53,6 +70,13 @@ public class ThemeController {
         return ResponseEntity.ok(themeDTOS);
     }
 
+    /**
+     * Mettre à jour un thème.
+     *
+     * @param id L'ID du thème à mettre à jour.
+     * @param theme Les nouvelles données du thème.
+     * @return Le thème mis à jour.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ThemeDTO> updateTheme(@PathVariable Long id, @RequestBody Theme theme) {
         Theme updatedTheme = themeService.update(id, theme);
@@ -63,6 +87,12 @@ public class ThemeController {
         }
     }
 
+    /**
+     * Supprimer un thème.
+     *
+     * @param id L'ID du thème à supprimer.
+     * @return Une réponse sans contenu.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id) {
         themeService.deleteById(id);
@@ -77,6 +107,13 @@ public class ThemeController {
         return themeDTO;
     }
 
+    /**
+     * S'abonner à un thème.
+     *
+     * @param id L'ID du thème.
+     * @param subscriptionRequestDTO Les détails de la demande d'abonnement.
+     * @return Un message indiquant le succès de l'abonnement.
+     */
     @PostMapping("/{id}/subscribe")
     public ResponseEntity<Map<String, String>> subscribeToTheme(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();
@@ -105,7 +142,13 @@ public class ThemeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", "Abonnement réussi"));
     }
 
-
+    /**
+     * Se désabonner d'un thème.
+     *
+     * @param id L'ID du thème.
+     * @param subscriptionRequestDTO Les détails de la demande de désabonnement.
+     * @return Un message indiquant le succès du désabonnement.
+     */
     @PostMapping("/{id}/unsubscribe")
     public ResponseEntity<Map<String, String>> unsubscribeFromTheme(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();
@@ -134,6 +177,13 @@ public class ThemeController {
         return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Désabonnement réussi"));
     }
 
+    /**
+     * Vérifie si un utilisateur est abonné à un thème.
+     *
+     * @param id L'ID du thème.
+     * @param subscriptionRequestDTO Les détails de la demande de vérification.
+     * @return Un message indiquant l'état de l'abonnement.
+     */
     @PostMapping("/{id}/isSubscribed")
     public ResponseEntity<Map<String, Boolean>> isSubscribed(@PathVariable Long id, @RequestBody SubscriptionRequestDTO subscriptionRequestDTO) {
         Long utilisateurId = subscriptionRequestDTO.getId();

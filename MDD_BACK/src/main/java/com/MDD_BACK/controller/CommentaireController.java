@@ -27,6 +27,13 @@ public class CommentaireController {
     @Autowired
     private CommentaireServiceImpl commentaireService;
 
+    /**
+     * Créer un nouveau commentaire.
+     *
+     * @param commentaireDTO Les détails du commentaire à créer.
+     * @param authorUsername Le nom d'utilisateur de l'auteur du commentaire.
+     * @return Le commentaire créé.
+     */
     @Operation(summary = "Créer un nouveau commentaire", description = "Crée un nouveau commentaire basé sur les données fournies.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -41,6 +48,12 @@ public class CommentaireController {
         return ResponseEntity.ok(savedCommentaireDTO);
     }
 
+    /**
+     * Obtenir les commentaires par ID d'article.
+     *
+     * @param id L'ID de l'article pour lequel récupérer les commentaires.
+     * @return Les commentaires de l'article spécifié.
+     */
     @Operation(summary = "Obtenir les commentaires par ID d'article", description = "Récupère les commentaires d'un article spécifique en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -57,6 +70,11 @@ public class CommentaireController {
         return ResponseEntity.ok(commentaireDTOs);
     }
 
+    /**
+     * Obtenir tous les commentaires.
+     *
+     * @return Une liste de tous les commentaires disponibles.
+     */
     @Operation(summary = "Obtenir tous les commentaires", description = "Récupère tous les commentaires disponibles.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -72,6 +90,13 @@ public class CommentaireController {
         return ResponseEntity.ok(commentaireDTOS);
     }
 
+    /**
+     * Mettre à jour un commentaire.
+     *
+     * @param id L'ID du commentaire à mettre à jour.
+     * @param commentaireDTO Les nouvelles données du commentaire.
+     * @return Le commentaire mis à jour.
+     */
     @Operation(summary = "Mettre à jour un commentaire", description = "Met à jour un commentaire existant en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -90,6 +115,12 @@ public class CommentaireController {
         }
     }
 
+    /**
+     * Supprimer un commentaire.
+     *
+     * @param id L'ID du commentaire à supprimer.
+     * @return Une réponse sans contenu.
+     */
     @Operation(summary = "Supprimer un commentaire", description = "Supprime un commentaire en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aucun contenu", content = @io.swagger.v3.oas.annotations.media.Content)
@@ -100,6 +131,12 @@ public class CommentaireController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Convertir un commentaire en DTO.
+     *
+     * @param commentaire Le commentaire à convertir.
+     * @return Le CommentaireDTO converti.
+     */
     private CommentaireDTO convertToDTO(Commentaire commentaire) {
         CommentaireDTO commentaireDTO = new CommentaireDTO();
         commentaireDTO.setId(commentaire.getId());
@@ -110,6 +147,12 @@ public class CommentaireController {
         return commentaireDTO;
     }
 
+    /**
+     * Convertir un DTO en commentaire.
+     *
+     * @param commentaireDTO Le CommentaireDTO à convertir.
+     * @return Le commentaire converti.
+     */
     private Commentaire convertToEntity(CommentaireDTO commentaireDTO) {
         Commentaire commentaire = new Commentaire();
         commentaire.setId(commentaireDTO.getId());

@@ -45,6 +45,12 @@ public class ArticleController {
     @Autowired
     private CommentaireServiceImpl commentaireService;
 
+    /**
+     * Créer un nouvel article.
+     *
+     * @param articleRequest Les détails de l'article à créer.
+     * @return L'article créé.
+     */
     @Operation(summary = "Créer un nouvel article", description = "Crée un nouvel article basé sur les données fournies.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -82,6 +88,12 @@ public class ArticleController {
         }
     }
 
+    /**
+     * Obtenir un article par ID.
+     *
+     * @param id L'ID de l'article à récupérer.
+     * @return L'article correspondant à l'ID fourni.
+     */
     @Operation(summary = "Obtenir un article par ID", description = "Récupère un article spécifique en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -105,6 +117,11 @@ public class ArticleController {
         }
     }
 
+    /**
+     * Obtenir tous les articles.
+     *
+     * @return Une liste de tous les articles disponibles.
+     */
     @Operation(summary = "Obtenir tous les articles", description = "Récupère tous les articles disponibles.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -123,6 +140,13 @@ public class ArticleController {
         return ResponseEntity.ok(articleDTOS);
     }
 
+    /**
+     * Mettre à jour un article.
+     *
+     * @param id L'ID de l'article à mettre à jour.
+     * @param articleRequest Les nouvelles données de l'article.
+     * @return L'article mis à jour.
+     */
     @Operation(summary = "Mettre à jour un article", description = "Met à jour un article existant en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
@@ -159,6 +183,12 @@ public class ArticleController {
         }
     }
 
+    /**
+     * Supprimer un article.
+     *
+     * @param id L'ID de l'article à supprimer.
+     * @return Une réponse sans contenu.
+     */
     @Operation(summary = "Supprimer un article", description = "Supprime un article en utilisant son ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aucun contenu", content = @io.swagger.v3.oas.annotations.media.Content)
@@ -169,6 +199,12 @@ public class ArticleController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Convertir un article en DTO.
+     *
+     * @param article L'article à convertir.
+     * @return L'ArticleDTO converti.
+     */
     private ArticleDTO convertToDTO(Article article) {
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setId(article.getId());
@@ -179,6 +215,13 @@ public class ArticleController {
         articleDTO.setThemeId(article.getTheme().getId());
         return articleDTO;
     }
+
+    /**
+     * Convertir un commentaire en DTO.
+     *
+     * @param commentaire Le commentaire à convertir.
+     * @return Le CommentaireDTO converti.
+     */
     private CommentaireDTO convertToDTO(Commentaire commentaire) {
         CommentaireDTO commentaireDTO = new CommentaireDTO();
         commentaireDTO.setId(commentaire.getId());

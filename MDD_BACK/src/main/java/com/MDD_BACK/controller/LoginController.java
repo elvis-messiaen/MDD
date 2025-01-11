@@ -33,6 +33,12 @@ public class LoginController {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Authentifie l'utilisateur.
+     *
+     * @param loginRequest Les informations de connexion de l'utilisateur.
+     * @return Une réponse contenant le token d'authentification.
+     */
     @Operation(summary = "Authentifie l'utilisateur", description = "Authentifie l'utilisateur")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "L'utilisateur est connecté."),

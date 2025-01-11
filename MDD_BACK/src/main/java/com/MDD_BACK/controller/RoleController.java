@@ -1,6 +1,5 @@
 package com.MDD_BACK.controller;
 
-
 import com.MDD_BACK.dto.RoleDTO;
 import com.MDD_BACK.service.impl.RoleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +24,11 @@ public class RoleController {
     @Autowired
     private RoleServiceImpl roleServiceImpl;
 
+    /**
+     * Obtenir tous les rôles.
+     *
+     * @return Une liste de tous les rôles.
+     */
     @Operation(summary = "Obtenir tous les rôles", description = "Récupère une liste de tous les rôles")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Liste de tous les rôles récupérée avec succès",
@@ -38,6 +42,12 @@ public class RoleController {
         return roleServiceImpl.getAllRoles();
     }
 
+    /**
+     * Obtenir le rôle par ID.
+     *
+     * @param id L'ID du rôle à récupérer.
+     * @return Le rôle correspondant à l'ID fourni.
+     */
     @Operation(summary = "Obtenir le rôle par ID", description = "Récupère un rôle par son ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rôle trouvé",
@@ -52,6 +62,12 @@ public class RoleController {
         return Optional.of(roleServiceImpl.getRoleById(id));
     }
 
+    /**
+     * Créer un nouveau rôle.
+     *
+     * @param roleDTO Les détails du rôle à créer.
+     * @return Le rôle créé.
+     */
     @Operation(summary = "Créer un nouveau rôle", description = "Crée un nouveau rôle")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Rôle créé avec succès",
@@ -66,6 +82,13 @@ public class RoleController {
         return roleServiceImpl.saveRole(roleDTO);
     }
 
+    /**
+     * Mettre à jour un rôle.
+     *
+     * @param id L'ID du rôle à mettre à jour.
+     * @param roleDTO Les nouvelles données du rôle.
+     * @return Le rôle mis à jour.
+     */
     @Operation(summary = "Mettre à jour un rôle", description = "Met à jour un rôle par son ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rôle mis à jour avec succès",
@@ -80,6 +103,11 @@ public class RoleController {
         return roleServiceImpl.updateRole(id, roleDTO);
     }
 
+    /**
+     * Supprimer un rôle.
+     *
+     * @param id L'ID du rôle à supprimer.
+     */
     @Operation(summary = "Supprimer un rôle", description = "Supprime un rôle par son ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rôle supprimé avec succès", content = @Content),
@@ -94,4 +122,3 @@ public class RoleController {
     }
 
 }
-
