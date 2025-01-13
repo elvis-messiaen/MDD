@@ -113,7 +113,7 @@ public class AuthController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean updateSuccess = utilisateurAuthService.updateUtilisateurInfo(username, utilisateurResponseDTO);
         if (updateSuccess) {
-            return ResponseEntity.ok(new ResponseDTO("Profile updated successfully"));
+            return ResponseEntity.ok(utilisateurResponseDTO); // Retourner les nouvelles informations avec le token mis à jour
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{}");
         }

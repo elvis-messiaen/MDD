@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {AuthService} from '../../../core/services/authService.service';
-import {RouterModule, Router} from '@angular/router';
-import {catchError, switchMap, tap} from 'rxjs/operators';
-import {of} from 'rxjs';
+import { AuthService } from '../../../core/services/authService.service';
+import { RouterModule, Router } from '@angular/router';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -24,16 +24,16 @@ import {of} from 'rxjs';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   registerForm: FormGroup;
   registrationSuccess = false;
   registrationError = '';
   formSubmitted = false;
   emailErrorMessage: string | null = null;
   private authService = inject(AuthService);
+  private subscription: Subscription = new Subscription();
 
-
-  constructor(private fb: FormBuilder,private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -53,12 +53,13 @@ export class RegisterComponent {
     this.registrationError = '';
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
-      this.registerUser(formData);
+      const registerSub = this.registerUser(formData);
+      this.subscription.add(registerSub);
     }
   }
 
   private registerUser(data: { username: string; email: string; password: string }) {
-    this.authService.checkEmailUsernameExists(data.email, data.username).pipe(
+    return this.authService.checkEmailUsernameExists(data.email, data.username).pipe(
       switchMap((exists: boolean) => {
         if (!exists) {
           return this.authService.registerUser(data).pipe(
@@ -83,6 +84,11 @@ export class RegisterComponent {
       })
     ).subscribe();
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   goBack(): void {
     this.router.navigate(['']);
   }

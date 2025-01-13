@@ -15,7 +15,7 @@ export class AuthService {
   private loginUrl = 'http://localhost:8080/auth/login';
   private profil = 'http://localhost:8080/auth/me';
   private logoutUrl = 'http://localhost:8080/auth/logout';
-  private checkEmailUrl = 'http://localhost:8080/auth/exists/emailusername';
+  private checkUserNameEmailUrl = 'http://localhost:8080/auth/exists/';
 
   private currentUserId: number | null = null;
 
@@ -41,16 +41,20 @@ export class AuthService {
       throw new Error('No auth token found');
     }
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Utilisateur>(this.profil, { headers });
+    return this.http.get<Utilisateur>(this.profil, {headers});
   }
 
-  updateUtilisateurProfile(data: Utilisateur): Observable<Utilisateur> {
+  updateUtilisateurProfile(data: Utilisateur): Observable<{ token: string }> {
     const token = localStorage.getItem('authToken');
     if (!token) {
       throw new Error('No auth token found');
     }
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put<Utilisateur>(this.profil, data, { headers });
+    return this.http.put<{ token: string }>(this.profil, data, { headers }).pipe(
+      tap(response => {
+        localStorage.setItem('authToken', response.token);
+      })
+    );
   }
 
   getCurrentUserId(): Observable<number> {
@@ -63,7 +67,7 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      this.http.post(`${this.logoutUrl}`, {}, { headers }).subscribe({
+      this.http.post(`${this.logoutUrl}`, {}, {headers}).subscribe({
         next: () => {
           localStorage.removeItem('authToken');
           this.router.navigate(['']);
@@ -71,11 +75,12 @@ export class AuthService {
       });
     }
   }
+
   checkEmailUsernameExists(email: string, username: string): Observable<boolean> {
-    return this.http.get<any>(`http://localhost:8080/auth/exists/${email}/${username}`, { observe: 'response' }).pipe(
+    const url = `${this.checkUserNameEmailUrl}${email}/${username}`;
+    return this.http.get<{ message: string }>(url, {observe: 'response'}).pipe(
       map(response => {
-        const body: { message: string } = response.body;
-        const message = body.message;
+        const message = response.body?.message;
         if (response.status === 200 && message === "Disponible") {
           return false;
         } else if (response.status === 409 && message === "Le nom d'utilisateur ou l'email est déjà pris") {

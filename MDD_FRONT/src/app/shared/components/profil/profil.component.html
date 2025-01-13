@@ -3,6 +3,9 @@
 </button>
 <div class="container mx-auto mt-10 p-4 text-center">
   <h1 class="text-2xl font-bold mb-5">Profil</h1>
+  <div *ngIf="updateSuccess" class="text-green-500 mb-4">
+    Votre profil a été mis à jour.
+  </div>
   <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <div class="flex flex-col items-center space-y-4">
       <div class="w-4/5 md:w-1/5">

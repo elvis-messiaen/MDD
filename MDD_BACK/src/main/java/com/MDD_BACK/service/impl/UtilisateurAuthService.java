@@ -1,6 +1,5 @@
 package com.MDD_BACK.service.impl;
 
-
 import com.MDD_BACK.dto.RegisterRequestDTO;
 import com.MDD_BACK.dto.UtilisateurResponseDTO;
 import com.MDD_BACK.entity.Role;
@@ -17,11 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 
 @Service
 public class UtilisateurAuthService {
@@ -68,8 +67,6 @@ public class UtilisateurAuthService {
         return token;
     }
 
-
-
     private String generateToken(Utilisateur utilisateur) {
         return Jwts.builder()
                 .setSubject(utilisateur.getUsername())
@@ -99,6 +96,9 @@ public class UtilisateurAuthService {
             utilisateur.setUsername(utilisateurResponseDTO.getUsername());
             utilisateur.setEmail(utilisateurResponseDTO.getEmail());
             utilisateurRepository.save(utilisateur);
+
+            String newToken = generateToken(utilisateur);
+            utilisateurResponseDTO.setToken(newToken);
             return true;
         }
         return false;

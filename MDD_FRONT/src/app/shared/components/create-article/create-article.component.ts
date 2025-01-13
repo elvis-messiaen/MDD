@@ -9,7 +9,6 @@ import { AuthService } from '../../../core/services/authService.service';
 import { CommonModule } from '@angular/common';
 import { ArticleToSend } from '../../../core/models/interfaces/ArticleToSend';
 import {MatIcon} from '@angular/material/icon';
-
 @Component({
   selector: 'app-create-article',
   templateUrl: './create-article.component.html',
@@ -37,7 +36,6 @@ export class CreateArticleComponent implements OnInit {
       themeId: new FormControl('', Validators.required),
     });
   }
-
   ngOnInit(): void {
     this.loadThemes();
   }
@@ -52,7 +50,6 @@ export class CreateArticleComponent implements OnInit {
       this.isLoading = false;
     }
   }
-
   onThemeChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.selectedThemeIndex = target.selectedIndex - 1;
@@ -61,7 +58,6 @@ export class CreateArticleComponent implements OnInit {
       this.errorMessage = 'Veuillez sélectionner un thème valide';
       return;
     }
-
     this.errorMessage = '';
   }
 

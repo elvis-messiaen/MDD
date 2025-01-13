@@ -10,6 +10,9 @@ public class UtilisateurResponseDTO {
 
     private String email;
 
+    @JsonProperty("token")
+    private String token;
+
     public Long getId() {
         return id;
     }
@@ -34,4 +37,11 @@ public class UtilisateurResponseDTO {
         this.email = email;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

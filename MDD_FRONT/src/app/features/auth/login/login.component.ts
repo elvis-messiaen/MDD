@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import {AuthService} from '../../../core/services/authService.service';
-import {MatIcon} from '@angular/material/icon';
+import { of, Subscription } from 'rxjs';
+import { AuthService } from '../../../core/services/authService.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +15,10 @@ import {MatIcon} from '@angular/material/icon';
   styleUrls: ['./login.component.scss'],
   imports: [CommonModule, ReactiveFormsModule, MatIcon]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
+  loginError: string = '';
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -33,15 +35,22 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm && this.loginForm.valid) {
-      this.authService.loginUser(this.loginForm.value).pipe(
+      const loginSub = this.authService.loginUser(this.loginForm.value).pipe(
         tap(response => {
           this.router.navigate(['/dashboard/articles']);
         }),
         catchError(error => {
+          this.loginError = 'Nom ou mot de passe incorrect !';
           return of(error);
         })
       ).subscribe();
+
+      this.subscription.add(loginSub);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   goBack(): void {

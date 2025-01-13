@@ -8,7 +8,11 @@
   <mat-icon class="text-3xl mb-4 pb-8 text-black">arrow_back</mat-icon>
 </button>
 <div class="container mx-auto mt-10 p-4 text-center">
-  <h1 class="text-2xl font-bold mb-5">Se connecter</h1>
+  <h1 class="text-2xl mb-5">Se connecter</h1>
+  <div *ngIf="loginError" class="text-red-500 font-bold mb-4">
+    {{ loginError }}
+  </div>
+
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="flex flex-col items-center space-y-4">
       <div class="w-4/5 md:w-1/5">

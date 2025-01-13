@@ -5,13 +5,10 @@ import com.MDD_BACK.entity.Article;
 import com.MDD_BACK.entity.Commentaire;
 import com.MDD_BACK.entity.Utilisateur;
 import com.MDD_BACK.service.impl.CommentaireServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -21,8 +18,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/commentaire")
 public class CommentaireController {
-
-    private static final Logger log = LoggerFactory.getLogger(CommentaireController.class);
 
     @Autowired
     private CommentaireServiceImpl commentaireService;

@@ -55,6 +55,7 @@
         <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-red-500 text-sm mt-1">
           <p *ngIf="registerForm.get('password')?.hasError('required')">Le mot de passe est obligatoire.</p>
           <p *ngIf="registerForm.get('password')?.hasError('minlength')">Le mot de passe doit contenir au moins 8 caractères.</p>
+          <p *ngIf="registerForm.get('password')?.hasError('pattern')">Le mot de passe doit contenir au moins un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial.</p>
         </div>
       </div>
 
